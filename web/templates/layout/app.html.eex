@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="auth0_client_key" content="<%= Application.get_env(:phoenix_guardian, :auth0)[:client_key] %>">
+    <meta name="auth0_endpoint" content="<%= Application.get_env(:phoenix_guardian, :auth0)[:endpoint] %>">
     <%= if Guardian.Plug.current_token(@conn) do %>
       <meta name="guardian_token" content="<%= Guardian.Plug.current_token(@conn) %>">
     <% end %>
@@ -50,6 +52,29 @@
 
     </div> <!-- /container -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
+    <script>
+      $(function () {
+        $("#nav-sign-in").click(evnt => {
+          var clientKey = $("meta[name='auth0_client_key']").attr("content");
+          var endpoint = $("meta[name='auth0_endpoint']").attr("content");
+
+          new Auth0Lock(
+            clientKey,
+            endpoint,
+            {
+              auth: {
+                redirectUrl: 'http://localhost:4000/auth/auth0',
+                responseType: 'code',
+                params: {
+                  scope: 'openid email'
+                }
+              }
+            }
+          ).show();
+        });
+      });
+    </script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

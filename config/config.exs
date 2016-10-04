@@ -24,6 +24,12 @@ config :phoenix, :generators,
   migration: true,
   binary_id: false
 
+config :phoenix_guardian,
+  auth0: [
+    client_key: "EuHqhw1F1ApaHggMD9tFkSWzw8yVKyuD",
+    endpoint: "hioperator.auth0.com"
+  ]
+
 config :phoenix_guardian, ecto_repos: [PhoenixGuardian.Repo]
 
 config :guardian, Guardian,
@@ -49,6 +55,7 @@ config :ueberauth, Ueberauth,
     google: {Ueberauth.Strategy.Google, []},
     facebook: {Ueberauth.Strategy.Facebook, [profile_fields: "email, name"]},
     identity: {Ueberauth.Strategy.Identity, [callback_methods: ["POST"]]},
+    auth0: {Ueberauth.Strategy.Auth0, []}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
@@ -77,8 +84,11 @@ config :guardian_db, GuardianDb,
   repo: PhoenixGuardian.Repo,
   sweep_interval: 60 # 60 minutes
 
+config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
+  domain: "hioperator.auth0.com",
+  client_id: "EuHqhw1F1ApaHggMD9tFkSWzw8yVKyuD",
+  client_secret: "8DrhVjpbM-k0Yc-SL-7wauPxUkfeC4zTu4kzttEIbVnxt9iLjvNYvVfopnzdKU0q"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
-
